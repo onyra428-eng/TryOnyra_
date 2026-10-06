@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onyra | One core. Everything secured.</title>
+<meta name="description" content="Onyra is a quiet onchain vault for what matters. Simple, transparent, secured at the core.">
+<style>
+:root{--bg:#070708;--fg:#f4f4f5;--mute:#8e8e96;--line:rgba(255,255,255,.1);--card:rgba(255,255,255,.04);--glow:rgba(255,255,255,.12)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--fg);font-family:Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+#glow{position:fixed;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 65%);pointer-events:none;z-index:-1;transform:translate(-50%,-50%);left:70%;top:20%;transition:left .6s ease-out,top .6s ease-out}
+body::after{content:"";position:fixed;inset:0;z-index:-2;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.xbar{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 16px;background:#fff;color:#000;font-size:14px;transition:.25s}
+.xbar b{font-weight:700}.xbar .arr{transition:.25s}.xbar:hover{background:#e4e4e7}.xbar:hover .arr{transform:translateX(4px)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,7,8,.7);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.03em}
+.brand svg{width:28px;height:28px}
+.links{display:flex;gap:26px;align-items:center;font-size:15px;color:var(--mute)}
+.links a:hover{color:var(--fg)}
+.links a.act{color:var(--fg)}
+.burger{display:none;font-size:24px}
+.btn{display:inline-block;padding:11px 22px;border-radius:999px;font-weight:600;font-size:15px;transition:.25s}
+.solid{background:#fff;color:#000}.solid:hover{transform:translateY(-2px);box-shadow:0 10px 34px rgba(255,255,255,.22)}
+.ghost{border:1px solid var(--line)}.ghost:hover{background:var(--card);border-color:rgba(255,255,255,.3)}
+.hero{text-align:center;padding:100px 0 70px}
+.mark{width:96px;height:96px;margin:0 auto 32px;animation:float 6s ease-in-out infinite;filter:drop-shadow(0 12px 44px rgba(255,255,255,.2))}
+@keyframes float{50%{transform:translateY(-10px)}}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-size:13px;color:var(--mute);margin-bottom:22px}
+h1{font-size:clamp(40px,7.5vw,78px);line-height:1.05;letter-spacing:-.035em}
+h1 span,h2 span{color:var(--mute)}
+.hero p{max-width:540px;margin:22px auto 34px;color:var(--mute);font-size:18px}
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:70px}
+.stats div{background:var(--bg);padding:26px 16px;text-align:center}
+.stats b{display:block;font-size:26px;letter-spacing:-.02em}.stats small{color:var(--mute)}
+section{padding:90px 0;border-top:1px solid var(--line)}
+.eyebrow{color:var(--mute);font-size:13px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+h2{font-size:clamp(28px,4.8vw,44px);letter-spacing:-.025em;line-height:1.12;margin-bottom:14px}
+.lead{color:var(--mute);max-width:580px;margin-bottom:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;transition:.25s}
+.card:hover{border-color:rgba(255,255,255,.3);transform:translateY(-4px);background:rgba(255,255,255,.07)}
+.card .n{font-size:13px;color:var(--mute);margin-bottom:16px}.card h3{font-size:20px;margin-bottom:8px}.card p{color:var(--mute);font-size:15px}
+.rev{opacity:0;transform:translateY(26px);transition:opacity .8s,transform .8s}.rev.on{opacity:1;transform:none}
+/* demo */
+.demo{border:1px solid var(--line);border-radius:26px;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.015));overflow:hidden}
+.tabs{display:flex;gap:6px;padding:14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabs button{padding:9px 18px;border-radius:999px;color:var(--mute);font-size:14px;transition:.2s}
+.tabs button.on{background:#fff;color:#000;font-weight:600}.tabs button:not(.on):hover{color:var(--fg);background:var(--card)}
+.pane{display:none;padding:32px}.pane.on{display:block;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.bal{font-size:clamp(34px,6vw,54px);font-weight:700;letter-spacing:-.03em}
+.sub{color:var(--mute);font-size:14px;margin-bottom:22px}
+.bar{display:flex;height:12px;border-radius:99px;overflow:hidden;gap:3px;margin:18px 0}
+.bar i{display:block;transition:width .5s;border-radius:99px}
+.leg{display:flex;gap:20px;flex-wrap:wrap;font-size:14px;color:var(--mute)}.leg b{color:var(--fg)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}
+.dep{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+.dep input{flex:1;min-width:140px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:11px 18px;color:var(--fg);font:inherit;outline:0}
+.dep input:focus{border-color:rgba(255,255,255,.4)}
+.row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line);font-size:15px;gap:12px}
+.row:last-child{border:0}.row span:last-child{color:var(--mute);text-align:right}
+.note{margin-top:16px;font-size:12px;color:var(--mute)}
+/* steps */
+.steps{display:grid;grid-template-columns:260px 1fr;gap:30px}
+.slist{display:flex;flex-direction:column;gap:8px}
+.slist button{text-align:left;padding:16px 18px;border-radius:16px;border:1px solid var(--line);color:var(--mute);transition:.2s}
+.slist button.on{background:var(--card);color:var(--fg);border-color:rgba(255,255,255,.3)}
+.sview{border:1px solid var(--line);border-radius:22px;padding:34px;background:var(--card);min-height:220px}
+.sview h3{font-size:26px;margin-bottom:10px;letter-spacing:-.02em}.sview p{color:var(--mute)}
+/* principles */
+.pr{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.pr div{padding:24px 26px;border:1px solid var(--line);border-radius:20px}.pr b{display:block;margin-bottom:6px;font-size:18px}.pr p{color:var(--mute);font-size:15px}
+/* faq */
+.faq{max-width:760px}
+.q{border-bottom:1px solid var(--line)}
+.q button{width:100%;display:flex;justify-content:space-between;align-items:center;padding:22px 0;font-size:18px;text-align:left;gap:16px}
+.q button::after{content:"+";font-size:26px;color:var(--mute);transition:.3s}
+.q.on button::after{transform:rotate(45deg)}
+.q div{max-height:0;overflow:hidden;color:var(--mute);transition:max-height .4s}
+.q.on div{max-height:200px;padding-bottom:22px}
+.big{text-align:center;padding:110px 0}
+.big h2{font-size:clamp(32px,6vw,60px)}
+footer{border-top:1px solid var(--line);padding:34px 0 44px;color:var(--mute);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+footer .fl{display:flex;gap:22px}footer a:hover{color:var(--fg)}
+#top{position:fixed;right:20px;bottom:20px;width:44px;height:44px;border-radius:50%;background:#fff;color:#000;font-size:20px;opacity:0;pointer-events:none;transition:.3s;z-index:60}
+#top.show{opacity:1;pointer-events:auto}
+@media(max-width:800px){
+.links{position:absolute;top:66px;left:0;right:0;flex-direction:column;background:rgba(7,7,8,.97);padding:20px 24px;gap:18px;border-bottom:1px solid var(--line);display:none}
+.links.open{display:flex}.burger{display:block}
+.stats{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:1fr}.slist{flex-direction:row;overflow-x:auto}.slist button{white-space:nowrap}
+.hero{padding:70px 0 50px}section{padding:64px 0}.pane{padding:22px}}
+</style>
+</head>
+<body>
+<div id="glow"></div>
+
+<a class="xbar" href="https://x.com/TryOnyra_" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+  <span>Follow <b>@TryOnyra_</b> on X</span><span class="arr">&rarr;</span>
+</a>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="#home">Onyra</a>
+  <nav class="links" id="links">
+    <a href="#demo">Vault</a><a href="#how">How it works</a><a href="#features">Features</a><a href="#principles">Principles</a><a href="#faq">FAQ</a>
+    <a class="btn solid" href="https://x.com/TryOnyra_" target="_blank" rel="noopener">Follow on X</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Menu">&#9776;</button>
+</div></header>
+
+<main class="wrap" id="home">
+  <div class="hero">
+    <div class="pill">A quiet vault for what matters</div>
+    <h1>One core.<br><span>Everything secured.</span></h1>
+    <p>Onyra is an onchain vault and treasury built to feel calm: one place to hold assets, see everything clearly, and verify it all yourself.</p>
+    <div class="cta">
+      <a class="btn solid" href="#demo">Try the vault preview</a>
+      <a class="btn ghost" href="https://x.com/TryOnyra_" target="_blank" rel="noopener">@TryOnyra_</a>
+    </div>
+    <div class="stats">
+      <div><b>1</b><small>Core vault</small></div>
+      <div><b>100%</b><small>Onchain verifiable</small></div>
+      <div><b>0</b><small>Hidden movements</small></div>
+      <div><b>24/7</b><small>Access to your assets</small></div>
+    </div>
+  </div>
+</main>
+
+<section id="demo"><div class="wrap rev">
+  <div class="eyebrow">Vault preview</div>
+  <h2>See how calm it feels.</h2>
+  <p class="lead">An interactive preview of the Onyra dashboard. Click through the tabs and try adding to the demo vault.</p>
+  <div class="demo">
+    <div class="tabs" id="dtabs">
+      <button class="on" data-p="p1">Overview</button><button data-p="p2">Activity</button><button data-p="p3">Treasury</button>
+    </div>
+    <div class="pane on" id="p1">
+      <div class="sub">Core Vault balance</div>
+      <div class="bal" id="bal">$12,480.00</div>
+      <div class="bar"><i id="b1" style="background:#fff;width:60%"></i><i id="b2" style="background:#9a9aa3;width:25%"></i><i id="b3" style="background:#4a4a52;width:15%"></i></div>
+      <div class="leg">
+        <span><span class="dot" style="background:#fff"></span>Core <b id="l1">60%</b></span>
+        <span><span class="dot" style="background:#9a9aa3"></span>Reserve <b id="l2">25%</b></span>
+        <span><span class="dot" style="background:#4a4a52"></span>Flexible <b id="l3">15%</b></span>
+      </div>
+      <div class="dep"><input id="amt" type="number" min="1" placeholder="Amount (demo)"><button class="btn solid" id="add">Add to vault</button><button class="btn ghost" id="reset">Reset</button></div>
+      <div class="note">Illustrative demo with sample numbers. Not a live vault.</div>
+    </div>
+    <div class="pane" id="p2">
+      <div class="row"><span>Deposit to Core Vault</span><span>Verified onchain</span></div>
+      <div class="row"><span>Reserve rebalanced</span><span>Visible to everyone</span></div>
+      <div class="row"><span>Withdrawal processed</span><span>Instant, no lock-up</span></div>
+      <div class="row"><span>Vault snapshot recorded</span><span>Public record</span></div>
+    </div>
+    <div class="pane" id="p3">
+      <div class="row"><span>Members</span><span>Shared visibility for all</span></div>
+      <div class="row"><span>Records</span><span>Every movement logged</span></div>
+      <div class="row"><span>Access</span><span>Clear structure, no manual</span></div>
+      <div class="row"><span>Proof</span><span>Anyone can check onchain</span></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap rev">
+  <div class="eyebrow">How it works</div>
+  <h2>Three calm steps.</h2>
+  <p class="lead">Select a step to see what happens.</p>
+  <div class="steps">
+    <div class="slist" id="slist"><button class="on" data-s="0">01 &nbsp; Deposit</button><button data-s="1">02 &nbsp; Watch</button><button data-s="2">03 &nbsp; Hold</button></div>
+    <div class="sview" id="sview"><h3>Deposit</h3><p>Place your assets into the Core Vault. One action, one destination, and nothing to configure before you begin.</p></div>
+  </div>
+</div></section>
+
+<section id="features"><div class="wrap rev">
+  <div class="eyebrow">Features</div>
+  <h2>Built around a single core.</h2>
+  <p class="lead">Everything in Onyra exists to make holding assets onchain feel steady and clear.</p>
+  <div class="grid">
+    <div class="card"><div class="n">01</div><h3>Core Vault</h3><p>One home for your assets, with balances and activity readable at a glance.</p></div>
+    <div class="card"><div class="n">02</div><h3>Transparent</h3><p>Every movement is verifiable onchain. Nothing hidden, nothing taken on faith.</p></div>
+    <div class="card"><div class="n">03</div><h3>Flexible Access</h3><p>You decide when things move, with no confusing lock-ups in the fine print.</p></div>
+    <div class="card"><div class="n">04</div><h3>Treasury Mode</h3><p>Shared funds for teams and communities, with shared visibility and clear records.</p></div>
+    <div class="card"><div class="n">05</div><h3>Simple by Design</h3><p>Every extra button had to earn its place. Only the essential remains.</p></div>
+    <div class="card"><div class="n">06</div><h3>Calm Interface</h3><p>Soft, quiet, and deliberate. Built so you stop worrying and start trusting.</p></div>
+  </div>
+</div></section>
+
+<section id="principles"><div class="wrap rev">
+  <div class="eyebrow">Principles</div>
+  <h2>What we hold ourselves to.</h2>
+  <p class="lead">Four ideas shape every decision we make.</p>
+  <div class="pr">
+    <div><b>Quiet by design</b><p>Security should never feel stressful. The best outcome is that you stop checking.</p></div>
+    <div><b>Verify, don't trust</b><p>We build it so you never have to take our word. Everything can be checked.</p></div>
+    <div><b>Less, but better</b><p>Removing things is the hardest part. We keep only what earns its place.</p></div>
+    <div><b>Yours to control</b><p>Protection should never mean being trapped. Access stays in your hands.</p></div>
+  </div>
+</div></section>
+
+<section id="faq"><div class="wrap rev">
+  <div class="eyebrow">FAQ</div>
+  <h2>Quick answers.</h2>
+  <div class="faq" id="faqs" style="margin-top:30px">
+    <div class="q"><button>What is Onyra?</button><div>Onyra is an onchain vault and treasury designed to be simple, transparent, and calm to use. One core where your assets are held and tracked.</div></div>
+    <div class="q"><button>Who is it for?</button><div>Anyone tired of cluttered dashboards: individuals, builders, and teams or communities that need a shared treasury everyone can trust.</div></div>
+    <div class="q"><button>Can I verify what happens to my assets?</button><div>Yes. Balances and movements are designed to be open and checkable onchain, so you never rely on promises alone.</div></div>
+    <div class="q"><button>What is Treasury Mode?</button><div>A shared view of funds for groups, with clear records of every movement and a structure that is easy to understand without a manual.</div></div>
+    <div class="q"><button>Where do I follow updates?</button><div>Everything goes out on X at <a href="https://x.com/TryOnyra_" target="_blank" rel="noopener" style="text-decoration:underline">@TryOnyra_</a>. Follow along to see what comes next.</div></div>
+  </div>
+</div></section>
+
+<section class="big"><div class="wrap rev">
+  <h2>Quiet by design.<br><span>Secured at the core.</span></h2>
+  <div class="cta" style="margin-top:34px"><a class="btn solid" href="https://x.com/TryOnyra_" target="_blank" rel="noopener">Join us on X</a><a class="btn ghost" href="#home">Back to top</a></div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>&copy; 2026 Onyra. One core. Everything secured.</span>
+  <div class="fl"><a href="#demo">Vault</a><a href="#features">Features</a><a href="#faq">FAQ</a><a href="https://x.com/TryOnyra_" target="_blank" rel="noopener">X: @TryOnyra_</a></div>
+</div></footer>
+<button id="top" aria-label="Back to top">&uarr;</button>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+// mobile menu
+$('#burger').onclick=()=>$('#links').classList.toggle('open');
+$$('#links a').forEach(a=>a.addEventListener('click',()=>$('#links').classList.remove('open')));
+// cursor glow
+addEventListener('pointermove',e=>{const g=$('#glow');g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'});
+// reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12});
+$$('.rev').forEach(el=>io.observe(el));
+// back to top + active nav
+const secs=$$('section[id]'),navs=$$('#links a[href^="#"]');
+addEventListener('scroll',()=>{$('#top').classList.toggle('show',scrollY>600);let c='';secs.forEach(s=>{if(scrollY>=s.offsetTop-140)c=s.id});navs.forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+c))});
+$('#top').onclick=()=>scrollTo({top:0,behavior:'smooth'});
+// demo tabs
+$$('#dtabs button').forEach(b=>b.onclick=()=>{$$('#dtabs button').forEach(x=>x.classList.remove('on'));$$('.pane').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('#'+b.dataset.p).classList.add('on')});
+// demo vault
+const base=12480;let total=base,core=base*.6,res=base*.25,flex=base*.15;
+const fmt=n=>'$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+function draw(){const t=core+res+flex;$('#bal').textContent=fmt(t);[['1',core],['2',res],['3',flex]].forEach(([k,v])=>{const p=Math.round(v/t*100);$('#b'+k).style.width=p+'%';$('#l'+k).textContent=p+'%'})}
+$('#add').onclick=()=>{const v=parseFloat($('#amt').value);if(!v||v<=0)return;core+=v*.6;res+=v*.25;flex+=v*.15;$('#amt').value='';draw()};
+$('#reset').onclick=()=>{core=base*.6;res=base*.25;flex=base*.15;$('#amt').value='';draw()};
+$('#amt').addEventListener('keydown',e=>{if(e.key==='Enter')$('#add').click()});
+// steps
+const steps=[['Deposit','Place your assets into the Core Vault. One action, one destination, and nothing to configure before you begin.'],['Watch','See balances, activity, and records from one clean dashboard. Everything is readable at a glance and verifiable onchain.'],['Hold','Keep what matters secured at the core. Access stays in your hands, so you can move assets whenever you choose.']];
+$$('#slist button').forEach(b=>b.onclick=()=>{$$('#slist button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const s=steps[b.dataset.s];$('#sview').innerHTML='<h3>'+s[0]+'</h3><p>'+s[1]+'</p>'});
+// faq
+$$('.q button').forEach(b=>b.onclick=()=>{const q=b.parentElement,o=q.classList.contains('on');$$('.q').forEach(x=>x.classList.remove('on'));if(!o)q.classList.add('on')});
+</script>
+</body>
+</html>
